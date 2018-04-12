@@ -34,6 +34,7 @@ def adjacency_matrix_to_graph(adjacency_matrix):
     G = nx.convert_matrix.from_numpy_matrix(np.matrix(adjacency_matrix_formatted))
     
     for node, datadict in G.nodes.items():
+
         assert node_weights[node] != 'x', 'The conquering cost of node number {} was specified to be x. Conquering costs cannot be x.'.format(node)
         datadict['weight'] = node_weights[node]
     
@@ -54,6 +55,7 @@ def adjacency_matrix_to_edge_list(adjacency_matrix):
             if adjacency_matrix[i][j] == 1:
                 edge_list.append((i, j))
     return edge_list
+
 
 
 def is_valid_walk(G, closed_walk):
@@ -93,3 +95,4 @@ def cost_of_solution(G, closed_walk, conquered_set):
 
 def convert_kingdom_names_to_indices(list_to_convert, list_of_kingdom_names):
     return [list_of_kingdom_names.index(name) for name in list_to_convert]
+

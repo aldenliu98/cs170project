@@ -5,8 +5,10 @@ sys.path.append('..')
 sys.path.append('../..')
 import argparse
 import utils
+
 from student_utils_sp18 import *
 import input_validator
+
 
 
 def validate_output(input_file, output_file, params=[]):
@@ -15,12 +17,14 @@ def validate_output(input_file, output_file, params=[]):
     input_data = utils.read_file(input_file)
     output_data = utils.read_file(output_file)
 
+
     input_message, input_error = input_validator.tests(input_file)
     cost, message = tests(input_data, output_data, params=params)
     message = 'Comments about input file:\n\n' + input_message + 'Comments about output file:\n\n' + message
 
     print(message)
     return input_error, cost, message
+
 
 
 def validate_all_outputs(input_directory, output_directory, params=[]):
@@ -32,8 +36,10 @@ def validate_all_outputs(input_directory, output_directory, params=[]):
         output_file = utils.input_to_output(input_file)
         print(input_file, output_file)
         if output_file not in output_files:
+
             print(f'No corresponding .out file for {input_file}')
             results = (None, None, f'No corresponding .out file for {input_file}')
+
         else:
             results = validate_output(input_file, output_file, params=params)
 
@@ -43,6 +49,7 @@ def validate_all_outputs(input_directory, output_directory, params=[]):
 
 def tests(input_data, output_data, params=[]):
     number_of_kingdoms, list_of_kingdom_names, starting_kingdom, adjacency_matrix = data_parser(input_data)
+
     G = adjacency_matrix_to_graph(adjacency_matrix)
 
     kingdom_tour = output_data[0]
@@ -74,6 +81,7 @@ def tests(input_data, output_data, params=[]):
         message += solution_message
 
     return cost, message
+
 
 
 if __name__ == '__main__':
