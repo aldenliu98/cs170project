@@ -38,5 +38,7 @@ def create_file(A):
 
 
 
+
+
 nx.draw(G)
 nx.write_gexf(G, "./graphs/50node.gexf")
