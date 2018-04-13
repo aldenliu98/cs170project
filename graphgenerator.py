@@ -6,7 +6,7 @@ from networkx import *
 import sys
 import random
 
-n= 50
+n= 200
 
 G=fast_gnp_random_graph(n, 0.4)
 # some properties
@@ -53,11 +53,8 @@ for i in range(len(adj_m)):
 		if(adj_m[i][j] == 0):
 			adj_m[i][j] = 'x'
 
-
-
-
 def create_file(n, adj_list):
-	f = open("50.in", "w")
+	f = open("./input_output_files/200.in", "w")
 	f.write(str(n)+"\n")
 
 	for i in range(n):
@@ -87,8 +84,10 @@ create_file(n, adj_m)
 
 
 
+
 nx.draw(G)
 nx.write_gexf(G, "./graphs/50node.gexf")
+
 
 
 
