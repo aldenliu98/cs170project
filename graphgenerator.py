@@ -22,7 +22,6 @@ A = nx.to_numpy_matrix(G)
 
 for i in range(len(A)):
 	print(A[i])
-print(A)
 
 nx.draw(G)
 plt.draw()
