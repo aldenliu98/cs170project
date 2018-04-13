@@ -72,6 +72,10 @@ def create_file(n, adj_list):
 
 create_file(n, adj_m)
 
+<<<<<<< HEAD
 nx.draw(G)
 nx.write_gexf(G, "./graphs/200in.gexf")
+=======
+
+>>>>>>> 8eeaca826b76acca42e410d7be8f29ded1b36bc3
 
