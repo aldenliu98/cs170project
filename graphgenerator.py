@@ -24,4 +24,4 @@ for i in range(len(A)):
 	print(A[i])
 
 nx.draw(G)
-plt.draw()
+nx.write_gexf(G, "./graphs/50node.gexf")
