@@ -85,8 +85,10 @@ create_file(n, adj_m)
 
 
 
+
 nx.draw(G)
 nx.write_gexf(G, "./graphs/50node.gexf")
+
 
 
 
