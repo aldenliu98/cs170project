@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import scipy as sp
 from networkx import *
 import sys
+import random
 
 n= 50
 e = 580
@@ -18,10 +20,26 @@ try:
 except TypeError: # Python 3.x
     write_adjlist(G,sys.stdout.buffer)
 
-A = nx.to_numpy_matrix(G)
+A = nx.adjacency_matrix(G)
 
-for i in range(len(A)):
-	print(A[i])
 
+for u,v,d in G.edges(data=True):
+	d['weight'] = random.randint(1,11)
+
+print(A.todense())
+
+def create_file(A):
+	with open('TESTER.txt','w') as f:
+		for line in A:
+			np.savetxt(f, line, fmt='%.2f')
+	f.close()
+
+
+
+
+
+<<<<<<< HEAD
 nx.draw(G)
 nx.write_gexf(G, "./graphs/50node.gexf")
+=======
+>>>>>>> d663c147329e0037a12f0b9c993e81c142559eb7
