@@ -7,7 +7,6 @@ import sys
 import random
 
 n= 50
-e = 580
 
 G=fast_gnp_random_graph(n, 0.4)
 # some properties
@@ -34,9 +33,6 @@ for u, v, datadict in G.edges(data=True):
 	if datadict['weight'] > shortest[u][v]:
 		datadict['weight'] = shortest[u][v]
 
-
-
-
 def create_file(A):
 	with open('TESTER.txt','w') as f:
 		for line in A:
@@ -50,7 +46,9 @@ def create_file(A):
 
 
 
+
 nx.draw(G)
 nx.write_gexf(G, "./graphs/50node.gexf")
+
 
 
