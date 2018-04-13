@@ -77,15 +77,3 @@ create_file(n, adj_m)
 
 
 
-nx.draw(G)
-nx.write_gexf(G, "./graphs/textWeights.gexf")
-
-def create_file(A):
-	with open('TESTER.txt','w') as f:
-		for line in A:
-			np.savetxt(f, line, fmt='%.2f')
-	f.close()
-
-nx.draw(G)
-nx.write_gexf(G, "./graphs/test3.gexf")
-
