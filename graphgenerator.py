@@ -6,49 +6,40 @@ from networkx import *
 import sys
 import random
 
+#generate a graph
 n= 200
-
 G=fast_gnp_random_graph(n, 0.4)
-# some properties
 
-#print("node degree clustering")
-#for v in nodes(G):
- #   print('%s %d %f' % (v,degree(G,v),clustering(G,v)))
+#read a graph, input path, doesnt work
+# G2 = read_graphml("./graphs/50TestModified.graphml")
 
-# print the adjacency list to terminal
-#try:
- #   write_adjlist(G,sys.stdout)
-#except TypeError: # Python 3.x
- #   write_adjlist(G,sys.stdout.buffer)
+def create_adjacency_matrix(G):
+	n = len(G)
+	for u,v,d in G.edges(data=True):
+		d['weight'] = random.randint(1,11)
 
-A = nx.adjacency_matrix(G)
+	shortest = dict(nx.floyd_warshall(G))
 
-for u,v,d in G.edges(data=True):
-	d['weight'] = random.randint(1,11)
+	adj_m = [[0 for x in range(n)] for y in range(n)]
 
-shortest = dict(nx.floyd_warshall(G))
+	for u, v, datadict in G.edges(data=True):
+		if datadict['weight'] > shortest[u][v]:
+			datadict['weight'] = shortest[u][v]
 
-adj_m = [[0 for x in range(n)] for y in range(n)]
+		adj_m[u][v] = datadict['weight']
+		adj_m[v][u] = datadict['weight']
 
-
-for u, v, datadict in G.edges(data=True):
-	if datadict['weight'] > shortest[u][v]:
-		datadict['weight'] = shortest[u][v]
-
-	adj_m[u][v] = datadict['weight']
-	adj_m[v][u] = datadict['weight']
-
-
-for i in range(len(adj_m)):
-	for j in range(len(adj_m[0])):
-		if(i==j):
-			adj_m[i][j] = random.randint(1,11)
-		
-		if(adj_m[i][j] == 0):
-			adj_m[i][j] = 'x'
+	for i in range(len(adj_m)):
+		for j in range(len(adj_m[0])):
+			if(i==j):
+				adj_m[i][j] = random.randint(1,11)
+			
+			if(adj_m[i][j] == 0):
+				adj_m[i][j] = 'x'
+	return adj_m
 
 def create_file(n, adj_list):
-	f = open("./input_output_files/200.in", "w")
+	f = open("./input_output_files/test.in", "w")
 	f.write(str(n)+"\n")
 
 	for i in range(n):
@@ -68,22 +59,12 @@ def create_file(n, adj_list):
 
 	f.close()
 
+print(create_adjacency_matrix(G2))
+
+adj_m = create_adjacency_matrix(G)
 create_file(n, adj_m)
 
-
-
-
-
-
-
-
-
-
-
-
-
-nx.draw(G)
-nx.write_gexf(G, "./graphs/200in.gexf")
+nx.write_gexf(G, "./graphs/test.gexf")
 
 
 
