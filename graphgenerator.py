@@ -35,12 +35,6 @@ for u, v, datadict in G.edges(data=True):
 	if datadict['weight'] > shortest[u][v]:
 		datadict['weight'] = shortest[u][v]
 
-def create_file(A):
-	with open('TESTER.txt','w') as f:
-		for line in A:
-			np.savetxt(f, line, fmt='%.2f')
-
-
 	adj_m[u][v] = datadict['weight']
 	adj_m[v][u] = datadict['weight']
 
@@ -86,12 +80,10 @@ create_file(n, adj_m)
 
 
 
+
+
 nx.draw(G)
-nx.write_gexf(G, "./graphs/50node.gexf")
-
-
-
-
+nx.write_gexf(G, "./graphs/200in.gexf")
 
 
 

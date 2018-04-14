@@ -4,12 +4,13 @@ import sys
 sys.path.append('..')
 sys.path.append('../..')
 
-import os
 
+import os
 import argparse
 import utils
 import networkx as nx
 import numpy as np
+
 
 from student_utils_sp18 import *
 
@@ -21,7 +22,6 @@ MAX_NAME_LENGTH = 20
 
 def validate_input(input_file, params=[]):
     print('Processing', input_file)
-
     message, error = tests(input_file, params)
     print(message)
 
@@ -37,6 +37,7 @@ def validate_all_inputs(input_directory, params=[]):
 def tests(input_file, params=[]):
     input_data = utils.read_file(input_file)
     number_of_kingdoms, list_of_kingdom_names, starting_kingdom, adjacency_matrix = data_parser(input_data)
+
 
     message = ''
     error = False
@@ -84,6 +85,7 @@ def tests(input_file, params=[]):
     G = adjacency_matrix_to_graph(adjacency_matrix)
 
     if not nx.is_connected(G):
+
 
         message += 'Your graph is not connected\n'
         error = True
