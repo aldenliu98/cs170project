@@ -24,7 +24,7 @@ G=fast_gnp_random_graph(n, 0.4)
 A = nx.adjacency_matrix(G)
 
 for u,v,d in G.edges(data=True):
-	d['weight'] = random.randint(1,11)
+	d['weight'] = random.randint(1,11) 
 
 shortest = dict(nx.floyd_warshall(G))
 
@@ -67,23 +67,5 @@ def create_file(n, adj_list):
 			f.write("\n")
 
 	f.close()
-
-create_file(n, adj_m)
-
-
-
-
-
-
-
-
-
-
-
-
-
-nx.draw(G)
-nx.write_gexf(G, "./graphs/200in.gexf")
-
 
 
