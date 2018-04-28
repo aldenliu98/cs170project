@@ -1,3 +1,4 @@
+import os
 import student_utils_sp18 as student 
 import networkx as nx
 from networkx.algorithms import approximation
@@ -6,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 
+pathinput = 'inputs/'
+pathoutput = 'outputs/'
 def efficiency_ratio(g, s, e, shortest_path, hashset, list_of_kingdom_names, adjacency_matrix):
 	
 	cost = shortest_path[s][e] + adjacency_matrix[e][e]
@@ -21,13 +24,15 @@ def efficiency_ratio(g, s, e, shortest_path, hashset, list_of_kingdom_names, adj
 
 
 
-for i in range(1,753):
+for filename in os.listdir(pathinput):
 
-	input_file_number = "inputs/"+str(i)+".in"
+	#input_file_number = "inputs/"+ str(i) +".in"
+	#print(input_file_number)
 	#f = open(input_file_number, "r")
+	print(filename)
 
 	try: 
-		input_data = utils.read_file(input_file_number)
+		input_data = utils.read_file(pathinput + filename)
 		number_of_kingdoms, list_of_kingdom_names, starting_kingdom, adjacency_matrix = student.data_parser(input_data)
 
 		try:
@@ -47,7 +52,6 @@ for i in range(1,753):
 
 
 			while len(s) != number_of_kingdoms:
-				
 
 				mincost = 0
 				vertex_to_add = None
@@ -88,6 +92,7 @@ for i in range(1,753):
 						path[i] = list_of_kingdom_names[path[i]]
 
 					final.extend(path)
+
 				else:
 
 					final.append(list_of_kingdom_names[vertex_to_add])
@@ -102,12 +107,13 @@ for i in range(1,753):
 				vertex = vertex_to_add
 
 
-			path = nx.shortest_path(graph, vertex, 0)
+			path = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
+			for i in range(len(path)):
+				path[i] = list_of_kingdom_names[path[i]]
 			path.pop(0)
 			final.extend(path)
 
-			out_file_number = "outputs/"+str(i)+".out"
-			output = open(out_file_number, "w")
+			output = open(pathoutput + filename[:len(filename)-3] + ".out", "w")
 
 			s = ""
 
@@ -123,15 +129,18 @@ for i in range(1,753):
 					s = s + str(line2[i]) + " "
 				else:
 					s = s + str(line2[i])
+
 			output.write(s + "\n")
-			output.close()		
-			
+			output.close()
+
+			print("Done with " + pathoutput + filename[:len(filename)-3] + ".out")
+
 		except IndexError:
-			print(input_file_number + " index error")
+			print(filename + " index error")
 	except ValueError:
-		print(input_file_number + " is a retard")
+		print(filename + " is a retard")
 	except FileNotFoundError:
-		print(input_file_number + " not found")
+		print(filename + " not found")
 
 
 
