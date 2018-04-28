@@ -202,90 +202,90 @@ def run_greedy(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 		s.update({list_of_kingdom_names[v]})
 
 
-		while len(s) != number_of_kingdoms:
+	while len(s) != number_of_kingdoms:
 
-			mincost = 0
-			vertex_to_add = None
-			count = 0
-					# for u, v in graph.edges(vertex):
+		mincost = 0
+		vertex_to_add = None
+		count = 0
+				# for u, v in graph.edges(vertex):
 
-					# 	if(list_of_kingdom_names[v] not in s):
+				# 	if(list_of_kingdom_names[v] not in s):
 
-					# 		count += 1
-					# 		c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+				# 		count += 1
+				# 		c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
 
-					# 		if(c > mincost):
-					# 			mincost = c
-					# 			vertex_to_add = v
-
-
-
-					# if count == 0:
-						
-					# 	for name in s:
-
-					# 		point = list_of_kingdom_names.index(name)
-
-					# 		for u, v in graph.edges(point):
-
-					# 			c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
-
-					# 			if(c > mincost):
-					# 				mincost = c
-					# 				vertex_to_add = v
-
-			for name in s:
-
-				point = list_of_kingdom_names.index(name)
-
-				for u, v in graph.edges(point):
-
-					c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
-
-					for a, b in graph.edges(v):
-
-						if(b not in s):
-
-							d = efficiency_ratio2(graph, u, a, b, shortest, s, list_of_kingdom_names, adjacency_matrix)
-
-							if(d > mincost):
-								mincost = d
-								vertex_to_add = b
-
-
-					if(c > mincost):
-						mincost = c
-						vertex_to_add = v
+				# 		if(c > mincost):
+				# 			mincost = c
+				# 			vertex_to_add = v
 
 
 
-			if(count == 0):
-				path = nx.shortest_path(graph, vertex, vertex_to_add)
-				path.pop(0)
-
-				for i in range(len(path)):
-					path[i] = list_of_kingdom_names[path[i]]
-
-				final.extend(path)
-
-			else:
-
-				final.append(list_of_kingdom_names[vertex_to_add])
-
-			s.update({list_of_kingdom_names[vertex_to_add]})
-			line2.append(list_of_kingdom_names[vertex_to_add])
-
-			for u, v in graph.edges(vertex_to_add):
-				s.update({list_of_kingdom_names[v]})
-
+				# if count == 0:
 					
-			vertex = vertex_to_add
+				# 	for name in s:
+
+				# 		point = list_of_kingdom_names.index(name)
+
+				# 		for u, v in graph.edges(point):
+
+				# 			c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+				# 			if(c > mincost):
+				# 				mincost = c
+				# 				vertex_to_add = v
+
+		for name in s:
+
+			point = list_of_kingdom_names.index(name)
+
+			for u, v in graph.edges(point):
+
+				c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+				for a, b in graph.edges(v):
+
+					if(b not in s):
+
+						d = efficiency_ratio2(graph, u, a, b, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+						if(d > mincost):
+							mincost = d
+							vertex_to_add = b
 
 
-		path = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
-		for i in range(len(path)):
-			path[i] = list_of_kingdom_names[path[i]]
-		path.pop(0)
-		final.extend(path)
+				if(c > mincost):
+					mincost = c
+					vertex_to_add = v
 
-		return final, line2
+
+
+		if(count == 0):
+			path = nx.shortest_path(graph, vertex, vertex_to_add)
+			path.pop(0)
+
+			for i in range(len(path)):
+				path[i] = list_of_kingdom_names[path[i]]
+
+			final.extend(path)
+
+		else:
+
+			final.append(list_of_kingdom_names[vertex_to_add])
+
+		s.update({list_of_kingdom_names[vertex_to_add]})
+		line2.append(list_of_kingdom_names[vertex_to_add])
+
+		for u, v in graph.edges(vertex_to_add):
+			s.update({list_of_kingdom_names[v]})
+
+				
+		vertex = vertex_to_add
+
+
+	path = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
+	for i in range(len(path)):
+		path[i] = list_of_kingdom_names[path[i]]
+	path.pop(0)
+	final.extend(path)
+
+	return final, line2
