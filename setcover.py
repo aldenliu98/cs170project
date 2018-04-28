@@ -7,7 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 
-pathinput = 'inputs/'
-pathoutput = 'outputs/'
+
+def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
+
 
 

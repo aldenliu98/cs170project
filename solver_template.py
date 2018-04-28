@@ -5,6 +5,7 @@ sys.path.append('../..')
 import argparse
 import utils
 from student_utils_sp18 import *
+import greedy as greedy
 
 """
 ======================================================================
@@ -27,8 +28,9 @@ def solve(list_of_kingdom_names, starting_kingdom, adjacency_matrix, params=[]):
 
     Output:
         Return 2 things. The first is a list of kingdoms representing the walk, and the second is the set of kingdoms that are conquered
+
     """
-    raise Exception('"solve" function not defined')
+    return greedy.run_greedy(list_of_kingdom_names, starting_kingdom, adjacency_matrix)
     # return closed_walk, conquered_kingdoms
 
 
