@@ -31,7 +31,7 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 
 		for key in dictionary:
-			c = efficiency(graph, shortest, vertex, key, adjacency_matrix, s, dictionary)
+			c = efficiency(graph, shortest, vertex, key, adjacency_matrix, s, dictionary, list_of_kingdom_names)
 
 			if(c > largest):
 				largest = c
@@ -44,7 +44,7 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 		for vert in just_conquer:
 
-			s.update({list_of_kingdom_names[next_vertex]})
+			s.update({list_of_kingdom_names[vert]})
 
 		conquer.append(list_of_kingdom_names[next_vertex])
 
@@ -59,7 +59,6 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 		vertex = next_vertex
 
-		print(conquer)
 
 	pathto_start = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
 
@@ -92,7 +91,7 @@ def create_set(graph, number_kingdoms, adjacency_matrix):
 	return dictionary
 
 
-def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary):
+def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary, list_of_kingdom_names):
 
 	cost = sp[start][end] + adjacency_matrix[end][end]
 
@@ -102,7 +101,7 @@ def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary):
 
 	for v in edges:
 
-		if(v not in s):
+		if(list_of_kingdom_names[v] not in s):
 			count += 1
 
 	return count / float(cost)
