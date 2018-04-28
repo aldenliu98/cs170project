@@ -9,9 +9,23 @@ import utils
 
 pathinput = 'inputs/'
 pathoutput = 'outputs/'
-def efficiency_ratio(g, s, e, shortest_path, hashset, list_of_kingdom_names, adjacency_matrix):
+def efficiency_ratio(s, e, shortest_path, hashset, list_of_kingdom_names, adjacency_matrix):
 	
 	cost = shortest_path[s][e] + adjacency_matrix[e][e]
+
+	count = 0
+
+	for a, b in graph.edges(e):
+
+		if(list_of_kingdom_names[b] not in hashset):
+			count += 1
+
+	return count / float(cost)
+
+
+def efficiency_ratio2(s, mid, e, shortest_path, hashset, list_of_kingdom_names, adjacency_matrix):
+	
+	cost = shortest_path[s][mid] + shortest_path[mid][e] + adjacency_matrix[e][e]
 
 	count = 0
 
@@ -56,32 +70,54 @@ for filename in os.listdir(pathinput):
 				mincost = 0
 				vertex_to_add = None
 				count = 0
-				for u, v in graph.edges(vertex):
+				# for u, v in graph.edges(vertex):
 
-					if(list_of_kingdom_names[v] not in s):
+				# 	if(list_of_kingdom_names[v] not in s):
 
-						count += 1
-						c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+				# 		count += 1
+				# 		c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+				# 		if(c > mincost):
+				# 			mincost = c
+				# 			vertex_to_add = v
+
+
+
+				# if count == 0:
+					
+				# 	for name in s:
+
+				# 		point = list_of_kingdom_names.index(name)
+
+				# 		for u, v in graph.edges(point):
+
+				# 			c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+				# 			if(c > mincost):
+				# 				mincost = c
+				# 				vertex_to_add = v
+
+				for name in s:
+
+					point = list_of_kingdom_names.index(name)
+
+					for u, v in graph.edges(point):
+
+						c = efficiency_ratio(u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+						for a, b in graph.edges(v):
+
+							d = efficiency_ratio2(u, a, b, shortest, s, list_of_kingdom_names, adjacency_matrix)
+
+							if(d > mincost):
+								mincost = d
+								vertex_to_add = b
+
 
 						if(c > mincost):
 							mincost = c
 							vertex_to_add = v
 
-
-
-				if count == 0:
-					
-					for name in s:
-
-						point = list_of_kingdom_names.index(name)
-
-						for u, v in graph.edges(point):
-
-							c = efficiency_ratio(graph, u, v, shortest, s, list_of_kingdom_names, adjacency_matrix)
-
-							if(c > mincost):
-								mincost = c
-								vertex_to_add = v
 
 
 				if(count == 0):
