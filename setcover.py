@@ -73,18 +73,17 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 	TSP = constructTSPGraph(conquer, shortest)
 	shortestTSP = dict(nx.floyd_warshall(TSP))
 
-	pathing = [list_of_kingdom_names.index(starting_kingdom)]
+	pathing = []
 
 	for i in range(len(conquer)):
 		pathing.append(list_of_kingdom_names.index(conquer[i]))
 
-	pathing.append(list_of_kingdom_names.index(starting_kingdom))
 
-	new_conquered = run_2opt(pathing, shortest)
+	new_conquered = run_2opt(pathing, shortest, list_of_kingdom_names.index(starting_kingdom))
 
 	conquered_path = []
 
-	for i in range(1, len(new_conquered) - 1):
+	for i in range(len(new_conquered)):
 		conquered_path.append(list_of_kingdom_names[new_conquered[i]])
 
 	new_path = [starting_kingdom]
@@ -99,6 +98,11 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 			new_path.append(list_of_kingdom_names[p[j]])
 
 		v = e
+
+	p = nx.shortest_path(graph,v,list_of_kingdom_names.index(starting_kingdom))
+	p.pop(0)
+	for i in range(len(p)):
+		new_path.append(list_of_kingdom_names[p[i]])
 
 
 
@@ -146,13 +150,16 @@ def constructTSPGraph(conquered, shortest):
 			adjacency_matrix_TSP[source][destination] = shortest[source][destination]
 	return student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
 
-def route_distance(route, shortest):
+def route_distance(route, shortest, starting_index):
 
 	distance = 0
 
-	for i in range(1,len(route)):
+	vertex = starting_index
+	for i in range(len(route)):
 
-		distance += shortest[route[i-1]][route[i]]
+		distance += shortest[vertex][route[i]]
+
+	distance += shortest[route[len(route)-1]][starting_index]
 
 	return distance
 
@@ -169,7 +176,7 @@ def swap_2opt(route, i, k):
 	return new_route
 
 
-def run_2opt(route, shortest):
+def run_2opt(route, shortest, starting_index):
 	"""
 	improves an existing route using the 2-opt swap until no improved route is found
 	best path found will differ depending of the start node of the list of nodes
@@ -177,17 +184,17 @@ def run_2opt(route, shortest):
 	returns the best path found
 	route - route to improve
 	"""
-	improvement = 0
+	improvement = True
 	b_route = route
-	b_distance = route_distance(route, shortest)
+	b_distance = route_distance(route, shortest,starting_index)
 	while improvement: 
 
 		improvement = False
 		for i in range(len(b_route) - 1):
-			for k in range(i+1, len(best_route)):
-				new_route = swap_2opt(best_route, i, k)
-				new_distance = route_distance(new_route, shortest)
-				if new_distance < best_distance:
+			for k in range(i+1, len(b_route)):
+				new_route = swap_2opt(b_route, i, k)
+				new_distance = route_distance(new_route, shortest,starting_index)
+				if new_distance < b_distance:
 					b_distance = new_distance
 					b_route = new_route
 					improvement = True
