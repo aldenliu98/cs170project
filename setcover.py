@@ -67,10 +67,42 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 		pathto_start[i] = list_of_kingdom_names[pathto_start[i]]
 
 	pathto_start.pop(0)
-	path.extend(pathto_start)	
+	path.extend(pathto_start)
 
 
-	return path, conquer
+	TSP = constructTSPGraph(conquer, shortest)
+	shortestTSP = dict(nx.floyd_warshall(TSP))
+
+	pathing = [list_of_kingdom_names.index(starting_kingdom)]
+
+	for i in range(len(conquer)):
+		pathing.append(list_of_kingdom_names.index(conquer[i]))
+
+	pathing.append(list_of_kingdom_names.index(starting_kingdom))
+
+	new_conquered = run_2opt(pathing, shortest)
+
+	conquered_path = []
+
+	for i in range(1, len(new_conquered) - 1):
+		conquered_path.append(list_of_kingdom_names[new_conquered[i]])
+
+	new_path = [starting_kingdom]
+
+	v = list_of_kingdom_names.index(starting_kingdom)
+	for i in range(len(pathing)):
+		e = pathing[i]
+		p = nx.shortest_path(graph, v, e)
+
+		p.pop(0)
+		for j in range(len(p)):
+			new_path.append(list_of_kingdom_names[p[j]])
+
+		v = e
+
+
+
+	return new_path, conquered_path
 
 
 # Creates a set for each node, a set consists of the node and its neighbors and is weighted by efficiency
@@ -113,4 +145,55 @@ def constructTSPGraph(conquered, shortest):
 		for destination in range(len(adjacency_matrix_TSP)):
 			adjacency_matrix_TSP[source][destination] = shortest[source][destination]
 	return student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
+
+def route_distance(route, shortest):
+
+	distance = 0
+
+	for i in range(1,len(route)):
+
+		distance += shortest[route[i-1]][route[i]]
+
+	return distance
+
+def swap_2opt(route, i, k):
+
+	assert i >= 0 and i < (len(route) - 1)
+	assert k > i and k < len(route)
+
+	new_route = route[0:i]
+	new_route.extend(reversed(route[i:k + 1]))
+	new_route.extend(route[k+1:])
+
+	assert len(new_route) == len(route)
+	return new_route
+
+
+def run_2opt(route, shortest):
+	"""
+	improves an existing route using the 2-opt swap until no improved route is found
+	best path found will differ depending of the start node of the list of nodes
+		representing the input tour
+	returns the best path found
+	route - route to improve
+	"""
+	improvement = 0
+	b_route = route
+	b_distance = route_distance(route, shortest)
+	while improvement: 
+
+		improvement = False
+		for i in range(len(b_route) - 1):
+			for k in range(i+1, len(best_route)):
+				new_route = swap_2opt(best_route, i, k)
+				new_distance = route_distance(new_route, shortest)
+				if new_distance < best_distance:
+					b_distance = new_distance
+					b_route = new_route
+					improvement = True
+					break #improvement found, return to the top of the while loop
+			if improvement:
+				break
+	assert len(b_route) == len(route)
+	return b_route
 
