@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 
-
+# Main method for algorithm
 def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 	number_kingdoms = len(list_of_kingdom_names)
@@ -73,7 +73,7 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 	return path, conquer
 
 
-
+# Creates a set for each node, a set consists of the node and its neighbors and is weighted by efficiency
 def create_set(graph, number_kingdoms, adjacency_matrix):
 
 	dictionary = {}
@@ -90,7 +90,7 @@ def create_set(graph, number_kingdoms, adjacency_matrix):
 
 	return dictionary
 
-
+# Calculate the efficiency for use as weight of a set
 def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary, list_of_kingdom_names):
 
 	cost = sp[start][end] + adjacency_matrix[end][end]
@@ -106,6 +106,11 @@ def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary, list_of_k
 
 	return count / float(cost)
 
-
-
+# Construct a graph to run TSP on given the results of our set cover decision
+def constructTSPGraph(conquered, shortest):
+	adjacency_matrix_TSP = [[0 for x in range(len(conquered))] for y in range(len(conquered))]
+	for source in range(len(adjacency_matrix_TSP)):
+		for destination in range(len(adjacency_matrix_TSP)):
+			adjacency_matrix_TSP[source][destination] = shortest[source][destination]
+	return student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
 
