@@ -71,37 +71,36 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 	# pathto_start.pop(0)
 	# path.extend(pathto_start)
 
+	conquering = []
+	if(starting_kingdom in conquer):
+		conquering.extend(conquer)
+		conquering.append(starting_kingdom)
+	else:
+		conquering = [starting_kingdom]
+		conquering.extend(conquer)
+		conquering.append(starting_kingdom)
 
-	adjacency_matrix_TSP = constructTSPmatrix(conquer, shortest)
+
+	adjacency_matrix_TSP = constructTSPmatrix(conquering, shortest, list_of_kingdom_names)
 	TSP = student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
 	shortestTSP = dict(nx.floyd_warshall(TSP))
 
-	tsp_path = tspsolver.solve_tsp(adjacency_matrix_TSP)
+	tsp_path = tspsolver.solve_tsp(adjacency_matrix_TSP,3, tspsolver.pairs_by_dist, (0,len(conquering)-1))
 
-	conquer_tsp_path = [conquer[point] for point in tsp_path]
-	print(conquer_tsp_path)
-
-
+	conquer_tsp_path = [conquering[point] for point in tsp_path]
+	#print(conquer_tsp_path)
 
 
-	pathing = []
+	new_conquered = run_2opt(tsp_path, adjacency_matrix_TSP, 0)
+	conquer_tsp_path = [conquering[point] for point in new_conquered]
+	#print(conquer_tsp_path)
 
-	for i in range(len(conquer)):
-		pathing.append(list_of_kingdom_names.index(conquer[i]))
-
-
-	new_conquered = run_2opt(pathing, shortest, list_of_kingdom_names.index(starting_kingdom))
-
-	conquered_path = []
-
-	for i in range(len(new_conquered)):
-		conquered_path.append(list_of_kingdom_names[new_conquered[i]])
 
 	new_path = [starting_kingdom]
 
 	v = list_of_kingdom_names.index(starting_kingdom)
-	for i in range(len(pathing)):
-		e = pathing[i]
+	for i in range(len(conquer_tsp_path)):
+		e = list_of_kingdom_names.index(conquer_tsp_path[i])
 		p = nx.shortest_path(graph, v, e)
 
 		p.pop(0)
@@ -110,14 +109,14 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 		v = e
 
-	p = nx.shortest_path(graph,v,list_of_kingdom_names.index(starting_kingdom))
-	p.pop(0)
-	for i in range(len(p)):
-		new_path.append(list_of_kingdom_names[p[i]])
+	#print(new_path)
 
 
 
-	return new_path, conquered_path
+	return new_path, conquer
+
+
+
 
 
 # Creates a set for each node, a set consists of the node and its neighbors and is weighted by efficiency
@@ -171,11 +170,11 @@ def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary, list_of_k
 	return count / float(cost)
 
 # Construct a graph to run TSP on given the results of our set cover decision
-def constructTSPmatrix(conquered, shortest):
+def constructTSPmatrix(conquered, shortest,list_of_kingdom_names):
 	adjacency_matrix_TSP = [[0 for x in range(len(conquered))] for y in range(len(conquered))]
 	for source in range(len(adjacency_matrix_TSP)):
 		for destination in range(len(adjacency_matrix_TSP)):
-			adjacency_matrix_TSP[source][destination] = shortest[source][destination]
+			adjacency_matrix_TSP[source][destination] = shortest[list_of_kingdom_names.index(conquered[source])][list_of_kingdom_names.index(conquered[destination])]
 	return adjacency_matrix_TSP
 
 def route_distance(route, shortest, starting_index):

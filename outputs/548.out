@@ -1,2 +1,2 @@
-a b e d f a1 b1 a1 b1 c1 d1 f1 a2 b2 a2 f1 a2 b2 c2 d2 f2 a3 b3 a3 f2 a3 b3 c3 d3 f3 a4 b4 a4 f3 a4 b4 c4 d4 f4 a5 b5 a5 f4 a5 b5 c5 d5 f5 a6 b6 a6 f5 a6 b6 c6 d6 f6 a7 b7 a7 f6 a7 b7 e7 d7 f7 a 
-e7 f6 a7 b7 f5 a6 b6 f4 a5 b5 f3 a4 b4 f2 a3 b3 f1 a2 b2 a1 b1 e b a 
+a b e d f a1 b1 c1 d1 f1 a2 b2 c2 d2 f2 a3 b3 c3 d3 f3 a4 b4 c4 d4 f4 a5 b5 c5 d5 f5 a6 b6 c6 d6 f6 a7 b7 e7 d7 f7 a 
+a b e b1 a1 b2 a2 f1 b3 a3 f2 b4 a4 f3 b5 a5 f4 b6 a6 f5 b7 a7 f6 e7 
