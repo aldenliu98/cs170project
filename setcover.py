@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 import tspsolver as tspsolver
-import SetCoverPy as setcover
+import setCoverPySolver as setcover
 
 # Main method for algorithm
 def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
@@ -22,33 +22,35 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 	dictionary = create_set(graph, number_kingdoms, adjacency_matrix)
 
 	#path = [starting_kingdom]
-	conquer = []
+	costList = runSetCoverPy(create_set_cover_matrix_cost(graph, number_kingdoms, adjacency_matrix))
+	conquer = [list_of_kingdom_names[i] for i in range(len(costList[0])) if costList[0][i] == True]
+	# conquer = []
 
-	vertex = list_of_kingdom_names.index(starting_kingdom)
+	# vertex = list_of_kingdom_names.index(starting_kingdom)
 
-	while len(s) != number_kingdoms:
+	# while len(s) != number_kingdoms:
 
-		largest = 0
-		next_vertex = None
-
-
-		for key in dictionary:
-			c = efficiency(graph, shortest, vertex, key, adjacency_matrix, s, dictionary, list_of_kingdom_names)
-
-			if(c > largest):
-				largest = c
-				next_vertex = key
+	# 	largest = 0
+	# 	next_vertex = None
 
 
-		just_conquer = dictionary.pop(next_vertex)
+	# 	for key in dictionary:
+	# 		c = efficiency(graph, shortest, vertex, key, adjacency_matrix, s, dictionary, list_of_kingdom_names)
 
-		s.update({list_of_kingdom_names[next_vertex]})
+	# 		if(c > largest):
+	# 			largest = c
+	# 			next_vertex = key
 
-		for vert in just_conquer:
 
-			s.update({list_of_kingdom_names[vert]})
+	# 	just_conquer = dictionary.pop(next_vertex)
 
-		conquer.append(list_of_kingdom_names[next_vertex])
+	# 	s.update({list_of_kingdom_names[next_vertex]})
+
+	# 	for vert in just_conquer:
+
+	# 		s.update({list_of_kingdom_names[vert]})
+
+	# 	conquer.append(list_of_kingdom_names[next_vertex])
 
 		# pathto_vert = nx.shortest_path(graph, vertex, next_vertex)
 		# pathto_vert.pop(0)
@@ -59,8 +61,7 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 		# path.extend(pathto_vert)
 
-		vertex = next_vertex
-
+		# vertex = next_vertex
 
 	# pathto_start = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
 
@@ -79,7 +80,6 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 		conquering = [starting_kingdom]
 		conquering.extend(conquer)
 		conquering.append(starting_kingdom)
-
 
 	adjacency_matrix_TSP = constructTSPmatrix(conquering, shortest, list_of_kingdom_names)
 	TSP = student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
@@ -143,7 +143,7 @@ def create_set_cover_matrix_cost(graph, number_kingdoms, adjacency_matrix):
 	for i in range(number_kingdoms):
 		for u, v in graph.edges(i):
 			matrix[v][i] = True
-	return [matrix, costs]
+	return [np.array(matrix), costs]
 
 # Running SetCoverPy
 def runSetCoverPy(inputs):
