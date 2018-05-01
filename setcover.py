@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 import tspsolver as tspsolver
+import SetCoverPy as setcover
 
 # Main method for algorithm
 def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
@@ -135,6 +136,23 @@ def create_set(graph, number_kingdoms, adjacency_matrix):
 		dictionary[i] = edges
 
 	return dictionary
+
+# Calculates a binary relationship matrix as well as cost vertex for use in set cover
+def create_set_cover_matrix_cost(graph, number_kingdoms, adjacency_matrix):
+	matrix = [[False for x in range(number_kingdoms)] for y in range(number_kingdoms)]
+	costs = [adjacency_matrix[i][i] for i in range(number_kingdoms)]
+	for i in range(number_kingdoms):
+		for u, v in graph.edges(i):
+			matrix[v][i] = True
+	return [matrix, costs]
+
+# Running SetCoverPy
+def runSetCoverPy(inputs):
+	a_matrix = inputs[0]
+	cost = inputs[1]
+	g = setcover.SetCover(a_matrix, cost)
+	solution, time_used = g.SolveSCP()
+	return [g.s, g.total_cost]
 
 # Calculate the efficiency for use as weight of a set
 def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary, list_of_kingdom_names):
