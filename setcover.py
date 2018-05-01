@@ -6,6 +6,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import utils
+import tspsolver as tspsolver
 
 # Main method for algorithm
 def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
@@ -19,7 +20,7 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 	dictionary = create_set(graph, number_kingdoms, adjacency_matrix)
 
-	path = [starting_kingdom]
+	#path = [starting_kingdom]
 	conquer = []
 
 	vertex = list_of_kingdom_names.index(starting_kingdom)
@@ -48,30 +49,39 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 		conquer.append(list_of_kingdom_names[next_vertex])
 
-		pathto_vert = nx.shortest_path(graph, vertex, next_vertex)
-		pathto_vert.pop(0)
+		# pathto_vert = nx.shortest_path(graph, vertex, next_vertex)
+		# pathto_vert.pop(0)
 		
-		for i in range(len(pathto_vert)):
-			pathto_vert[i] = list_of_kingdom_names[pathto_vert[i]]
+		# for i in range(len(pathto_vert)):
+		# 	pathto_vert[i] = list_of_kingdom_names[pathto_vert[i]]
 
 
-		path.extend(pathto_vert)
+		# path.extend(pathto_vert)
 
 		vertex = next_vertex
 
 
-	pathto_start = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
+	# pathto_start = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
 
-	for i in range(len(pathto_start)):
+	# for i in range(len(pathto_start)):
 
-		pathto_start[i] = list_of_kingdom_names[pathto_start[i]]
+	# 	pathto_start[i] = list_of_kingdom_names[pathto_start[i]]
 
-	pathto_start.pop(0)
-	path.extend(pathto_start)
+	# pathto_start.pop(0)
+	# path.extend(pathto_start)
 
 
-	TSP = constructTSPGraph(conquer, shortest)
+	adjacency_matrix_TSP = constructTSPmatrix(conquer, shortest)
+	TSP = student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
 	shortestTSP = dict(nx.floyd_warshall(TSP))
+
+	tsp_path = tspsolver.solve_tsp(adjacency_matrix_TSP)
+
+	conquer_tsp_path = [conquer[point] for point in tsp_path]
+	print(conquer_tsp_path)
+
+
+
 
 	pathing = []
 
@@ -143,12 +153,12 @@ def efficiency(graph, sp, start, end, adjacency_matrix, s, dictionary, list_of_k
 	return count / float(cost)
 
 # Construct a graph to run TSP on given the results of our set cover decision
-def constructTSPGraph(conquered, shortest):
+def constructTSPmatrix(conquered, shortest):
 	adjacency_matrix_TSP = [[0 for x in range(len(conquered))] for y in range(len(conquered))]
 	for source in range(len(adjacency_matrix_TSP)):
 		for destination in range(len(adjacency_matrix_TSP)):
 			adjacency_matrix_TSP[source][destination] = shortest[source][destination]
-	return student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
+	return adjacency_matrix_TSP
 
 def route_distance(route, shortest, starting_index):
 
