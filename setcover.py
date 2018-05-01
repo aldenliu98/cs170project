@@ -23,45 +23,46 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 	#path = [starting_kingdom]
 	costList = runSetCoverPy(create_set_cover_matrix_cost(graph, number_kingdoms, adjacency_matrix))
-	conquer = [list_of_kingdom_names[i] for i in range(len(costList[0])) if costList[0][i] == True]
-	# conquer = []
 
-	# vertex = list_of_kingdom_names.index(starting_kingdom)
+	conquer1 = [list_of_kingdom_names[i] for i in range(len(costList[0])) if costList[0][i] == True]
+	conquer2 = []
 
-	# while len(s) != number_kingdoms:
+	vertex = list_of_kingdom_names.index(starting_kingdom)
 
-	# 	largest = 0
-	# 	next_vertex = None
+	while len(s) != number_kingdoms:
 
-
-	# 	for key in dictionary:
-	# 		c = efficiency(graph, shortest, vertex, key, adjacency_matrix, s, dictionary, list_of_kingdom_names)
-
-	# 		if(c > largest):
-	# 			largest = c
-	# 			next_vertex = key
+		largest = 0
+		next_vertex = None
 
 
-	# 	just_conquer = dictionary.pop(next_vertex)
+		for key in dictionary:
+			c = efficiency(graph, shortest, vertex, key, adjacency_matrix, s, dictionary, list_of_kingdom_names)
 
-	# 	s.update({list_of_kingdom_names[next_vertex]})
+			if(c > largest):
+				largest = c
+				next_vertex = key
 
-	# 	for vert in just_conquer:
 
-	# 		s.update({list_of_kingdom_names[vert]})
+		just_conquer = dictionary.pop(next_vertex)
 
-	# 	conquer.append(list_of_kingdom_names[next_vertex])
+		s.update({list_of_kingdom_names[next_vertex]})
 
-		# pathto_vert = nx.shortest_path(graph, vertex, next_vertex)
-		# pathto_vert.pop(0)
+		for vert in just_conquer:
+
+			s.update({list_of_kingdom_names[vert]})
+
+		conquer2.append(list_of_kingdom_names[next_vertex])
+
+		#pathto_vert = nx.shortest_path(graph, vertex, next_vertex)
+		#pathto_vert.pop(0)
 		
-		# for i in range(len(pathto_vert)):
-		# 	pathto_vert[i] = list_of_kingdom_names[pathto_vert[i]]
+		#for i in range(len(pathto_vert)):
+			#pathto_vert[i] = list_of_kingdom_names[pathto_vert[i]]
 
 
-		# path.extend(pathto_vert)
+		#path.extend(pathto_vert)
 
-		# vertex = next_vertex
+		vertex = next_vertex
 
 	# pathto_start = nx.shortest_path(graph, vertex, list_of_kingdom_names.index(starting_kingdom))
 
@@ -72,6 +73,14 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 	# pathto_start.pop(0)
 	# path.extend(pathto_start)
 
+
+	conquer = []
+
+	if(len(conquer1) >= len(conquer2)):
+		conquer = conquer2
+	else:
+		conquer = conquer1
+
 	conquering = []
 	if(starting_kingdom in conquer):
 		conquering.extend(conquer)
@@ -81,18 +90,23 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 		conquering.extend(conquer)
 		conquering.append(starting_kingdom)
 
+
 	adjacency_matrix_TSP = constructTSPmatrix(conquering, shortest, list_of_kingdom_names)
 	TSP = student.adjacency_matrix_to_graph(adjacency_matrix_TSP)
 	shortestTSP = dict(nx.floyd_warshall(TSP))
 
-	tsp_path = tspsolver.solve_tsp(adjacency_matrix_TSP,3, tspsolver.pairs_by_dist, (0,len(conquering)-1))
+	print(conquering)
+
+	indices = [i for i in range(len(conquering)) if conquering[i] == starting_kingdom]
+	print(indices)
+	tsp_path = tspsolver.solve_tsp(adjacency_matrix_TSP,3, tspsolver.pairs_by_dist, (indices[0],indices[1]))
 
 	conquer_tsp_path = [conquering[point] for point in tsp_path]
-	#print(conquer_tsp_path)
+	print(conquer_tsp_path)
 
 
-	new_conquered = run_2opt(tsp_path, adjacency_matrix_TSP, 0)
-	conquer_tsp_path = [conquering[point] for point in new_conquered]
+	#new_conquered = run_2opt(tsp_path, adjacency_matrix_TSP, 0)
+	#conquer_tsp_path = [conquering[point] for point in new_conquered]
 	#print(conquer_tsp_path)
 
 
@@ -109,7 +123,7 @@ def run(list_of_kingdom_names, starting_kingdom, adjacency_matrix):
 
 		v = e
 
-	#print(new_path)
+	print(new_path)
 
 
 
@@ -185,6 +199,7 @@ def route_distance(route, shortest, starting_index):
 	for i in range(len(route)):
 
 		distance += shortest[vertex][route[i]]
+		vertex = route[i]
 
 	distance += shortest[route[len(route)-1]][starting_index]
 
